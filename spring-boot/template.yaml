@@ -1,8 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  AWSLambdaJavaSnapStartTest
-  Sample SAM Template
+  AWSLambdaSpringBootJavaSnapStartTest
+  Sample SAM Template 
 
 Parameters:
   Stage:
@@ -11,7 +11,8 @@ Parameters:
     
 Globals:
   Function:
-    CodeUri: target/aws-lambda-snap-start-1.0.0-SNAPSHOT.jar
+    Handler: software.amazonaws.example.product.handler.StreamLambdaHandler::handleRequest
+    CodeUri: target/aws-spring-boot-lambda-snap-start-1.0.0-SNAPSHOT.jar
     Runtime: java11
     Timeout: 30 
     MemorySize: 1024
@@ -25,8 +26,8 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
-      Name: AWSLambdaJavaSnapStartAPI
-      Description: Api for AWSLambdaJavaSnapStart
+      Name: AWSLambdaSpringBootJavaSnapStartAPI
+      Description: Api for AWSLambdaSpringBootJavaSnapStart
       Auth:
         ApiKeyRequired: true  # sets for all methods
 
@@ -38,8 +39,8 @@ Resources:
       ApiStages: 
         - ApiId: !Ref MyApi
           Stage: !Ref Stage
-      UsagePlanName: AWSLambdaJavaSnapStartAPIUsagePlan
-      Description: Usage plan for AWSLambdaJavaSnapStartAPI
+      UsagePlanName: AWSLambdaSpringBootJavaSnapStartAPIUsagePlan
+      Description: Usage plan for AWSLambdaSpringBootJavaSnapStartAPI
       Quota:
           Limit: 500
           Period: DAY
@@ -52,11 +53,11 @@ Resources:
     DependsOn:  
        - MyApiStage
     Properties: 
-      Name: "AWSLambdaJavaSnapStartApiKey"
-      Description: "AWSLambdaJavaSnapStart API Key"
+      Name: "AWSLambdaSpringBootJavaSnapStartApiKey"
+      Description: "AWSLambdaSpringBootJavaSnapStart API Key"
       Enabled: true
       GenerateDistinctId: false
-      Value: a6ZbcDefQW12BN56WEM7
+      Value: a6ZbcDefQW12BN56WEM2
       StageKeys:
         - RestApiId: !Ref MyApi
           StageName: !Ref Stage
@@ -70,22 +71,22 @@ Resources:
         KeyType: API_KEY
         UsagePlanId: !Ref MyApiUsagePlan
 
-
+ 
   GetProductByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetProductByIdWithOutSnapStart
-      Handler: software.amazonaws.example.product.handler.GetProductByIdHandler::handleRequest
+      FunctionName: GetProductByIdWithSpringBoot
+      AutoPublishAlias: liveVersion
       Policies:
-        - LambdaInvokePolicy:
-            FunctionName: !Ref GetProductByIdWithSnapStartFunction
+        - DynamoDBReadPolicy:
+            TableName: !Ref ProductsTable
       Events:
         GetRequestById:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
             Path: /products/{id}
-            Method: get
+            Method: get            
 
   GetProductByIdFunctionLogGroup:
     Type: AWS::Logs::LogGroup
@@ -93,29 +94,11 @@ Resources:
       LogGroupName: !Sub "/aws/lambda/${GetProductByIdFunction}"
       RetentionInDays: 7
 
-
-  GetProductByIdWithSnapStartFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: GetProductByIdWithSnapStart
-      AutoPublishAlias: liveVersion
-      Handler: software.amazonaws.example.product.handler.GetProductByIdWithSnapStartHandler::handleRequest
-      Policies:
-        - DynamoDBReadPolicy:
-            TableName: !Ref ProductsTable
-
-  GetProductByIdWithSnapStartFunctionLogGroup:
-    Type: AWS::Logs::LogGroup
-    Properties:
-      LogGroupName: !Sub "/aws/lambda/${GetProductByIdWithSnapStartFunction}"
-      RetentionInDays: 7
-
  
   PutProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: PutProductWithSnapStart 
-      Handler: software.amazonaws.example.product.handler.CreateProductHandler::handleRequest
+      FunctionName: PutProductWithSpringBoot
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ProductsTable
@@ -136,7 +119,7 @@ Resources:
   ProductsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "AWSLambdaJavaSnapStartProductsTable"
+      TableName: "AWSLambdaSpringBootJavaSnapStartProductsTable"
       PointInTimeRecoverySpecification:
          PointInTimeRecoveryEnabled: true
       AttributeDefinitions:
@@ -151,6 +134,6 @@ Resources:
       
 
 Outputs:
-  AWSLambdaJavaSnapStartApiEndpoint:
+  AWSLambdaJavaSpringBootSnapStartApiEndpoint:
     Description: "API Gateway endpoint URL for Prod stage for AWS Lambda Java Snap Start"
     Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/prod/products"
