@@ -15,11 +15,11 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 
 import software.amazonaws.Application;
-import software.amazonaws.example.product.controller.ProductController;
+
 
 
 public class StreamLambdaHandler implements RequestStreamHandler {
-	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+	private static final Logger logger = LoggerFactory.getLogger(StreamLambdaHandler.class);
 	
     private static SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
     static {
@@ -42,7 +42,7 @@ public class StreamLambdaHandler implements RequestStreamHandler {
     public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context)
             throws IOException {
     	
-    	logger.info("entered stream lambda handler");
+    	logger.info("entered generic stream lambda handler");
         handler.proxyStream(inputStream, outputStream, context);
     }
 }
