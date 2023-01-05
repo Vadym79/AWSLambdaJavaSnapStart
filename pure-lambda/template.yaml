@@ -37,7 +37,7 @@ Resources:
        #   HttpMethod: '*'
       Auth:
         ApiKeyRequired: true  # sets for all methods
-  
+  0
   
   MyApiCWLRoleArn:
    Type: AWS::ApiGateway::Account

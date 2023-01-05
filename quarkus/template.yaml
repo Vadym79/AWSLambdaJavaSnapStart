@@ -24,12 +24,49 @@ Globals:
 Resources:
   MyApi:
     Type: AWS::Serverless::Api
+    DependsOn: MyApiCWLRoleArn 
     Properties:
       StageName: !Ref Stage
       Name: AWSLambdaQuarkusJavaSnapStartAPI
       Description: Api for AWSLambdaQuarkusJavaSnapStart
+      AccessLogSetting:
+        DestinationArn: !Sub ${MyApiLogGroup.Arn} # This Log Group is already created within our SAM Template
+        Format: "{'integrationLatency':'$context.integrationLatency', 'latency':'$context.responseLatency', 'requestId':'$context.requestId', 'ip': '$context.identity.sourceIp', 'caller':'$context.identity.caller', 'user':'$context.identity.user','requestTime':'$context.requestTime', 'xrayTraceId':'$context.xrayTraceId', 'wafResponseCode':'$context.wafResponseCode', 'httpMethod':'$context.httpMethod','resourcePath':'$context.resourcePath', 'status':'$context.status','protocol':'$context.protocol', 'responseLength':'$context.responseLength' }"
+      #MethodSettings:
+       # - MetricsEnabled: True
+       #   ResourcePath: '/*'
+       #   HttpMethod: '*'
+
       Auth:
         ApiKeyRequired: true  # sets for all methods
+
+  MyApiCWLRoleArn:
+   Type: AWS::ApiGateway::Account
+   Properties: 
+      CloudWatchRoleArn: !GetAtt CloudWatchRole.Arn
+      
+  # IAM Role for API GW + CWL
+  CloudWatchRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            Action: 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+        Path: /
+        ManagedPolicyArns:
+          - 'arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs'   
+      
+        
+  MyApiLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+       LogGroupName: !Sub "/aws/apigateway/${MyApi}"
+       RetentionInDays: 7
+
 
   MyApiUsagePlan:
      Type: AWS::ApiGateway::UsagePlan
@@ -96,7 +133,6 @@ Resources:
     Properties:
       LogGroupName: !Sub "/aws/lambda/${GetProductByIdFunction}"
       RetentionInDays: 7
-
  
   PutProductFunction:
     Type: AWS::Serverless::Function
