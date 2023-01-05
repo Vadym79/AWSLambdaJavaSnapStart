@@ -11,7 +11,7 @@ Parameters:
     
 Globals:
   Function:
-    CodeUri: target/aws-lambda-snap-start-1.0.0-SNAPSHOT.jar
+    CodeUri: target/aws-pure-lambda-snap-start-1.0.0-SNAPSHOT.jar
     Runtime: java11
     Timeout: 30 
     MemorySize: 1024
@@ -23,13 +23,49 @@ Globals:
 Resources:
   MyApi:
     Type: AWS::Serverless::Api
+    DependsOn: MyApiCWLRoleArn 
     Properties:
       StageName: !Ref Stage
       Name: AWSLambdaJavaSnapStartAPI
       Description: Api for AWSLambdaJavaSnapStart
+      AccessLogSetting:
+        DestinationArn: !Sub ${MyApiLogGroup.Arn} # This Log Group is already created within our SAM Template
+        Format: "{'integrationLatency':'$context.integrationLatency', 'latency':'$context.responseLatency', 'requestId':'$context.requestId', 'ip': '$context.identity.sourceIp', 'caller':'$context.identity.caller', 'user':'$context.identity.user','requestTime':'$context.requestTime', 'xrayTraceId':'$context.xrayTraceId', 'wafResponseCode':'$context.wafResponseCode', 'httpMethod':'$context.httpMethod','resourcePath':'$context.resourcePath', 'status':'$context.status','protocol':'$context.protocol', 'responseLength':'$context.responseLength' }"
+      #MethodSettings:
+       # - MetricsEnabled: True
+       #   ResourcePath: '/*'
+       #   HttpMethod: '*'
       Auth:
         ApiKeyRequired: true  # sets for all methods
-
+  
+  
+  MyApiCWLRoleArn:
+   Type: AWS::ApiGateway::Account
+   Properties: 
+      CloudWatchRoleArn: !GetAtt CloudWatchRole.Arn
+      
+  # IAM Role for API GW + CWL
+  CloudWatchRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            Action: 'sts:AssumeRole'
+            Effect: Allow
+            Principal:
+              Service: apigateway.amazonaws.com
+        Path: /
+        ManagedPolicyArns:
+          - 'arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs'   
+      
+        
+  MyApiLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+       LogGroupName: !Sub "/aws/apigateway/${MyApi}"
+       RetentionInDays: 7
+      
   MyApiUsagePlan:
      Type: AWS::ApiGateway::UsagePlan
      DependsOn:  
@@ -74,19 +110,21 @@ Resources:
   GetProductByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetProductByIdWithOutSnapStart
+      FunctionName: GetProductByIdWithPureLambda
+      AutoPublishAlias: liveVersion
       Handler: software.amazonaws.example.product.handler.GetProductByIdHandler::handleRequest
       Policies:
-        - LambdaInvokePolicy:
-            FunctionName: !Ref GetProductByIdWithSnapStartFunction
+        - DynamoDBReadPolicy:
+            TableName: !Ref ProductsTable
       Events:
         GetRequestById:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
             Path: /products/{id}
-            Method: get
-
+            Method: get     
+            
+            
   GetProductByIdFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
@@ -94,20 +132,28 @@ Resources:
       RetentionInDays: 7
 
 
-  GetProductByIdWithSnapStartFunction:
+  GetProductByIdWithPrimingFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetProductByIdWithSnapStart
+      FunctionName: GetProductByIdWithPureLambdaAndPriming
       AutoPublishAlias: liveVersion
-      Handler: software.amazonaws.example.product.handler.GetProductByIdWithSnapStartHandler::handleRequest
+      Handler: software.amazonaws.example.product.handler.GetProductByIdWithPrimingHandler::handleRequest
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref ProductsTable
-
-  GetProductByIdWithSnapStartFunctionLogGroup:
+      Events:
+        GetRequestById:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /productsWithPriming/{id}
+            Method: get     
+            
+            
+  GetProductByIdWithPrimingFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${GetProductByIdWithSnapStartFunction}"
+      LogGroupName: !Sub "/aws/lambda/${GetProductByIdWithPrimingFunction}"
       RetentionInDays: 7
 
  
