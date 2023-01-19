@@ -26,4 +26,3 @@ public class Products {
     this.products = products;
   }
 }
-
