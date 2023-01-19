@@ -64,17 +64,17 @@ public class StreamLambdaHandler implements RequestStreamHandler, Resource {
     
 	@Override
 	public void beforeCheckpoint(org.crac.Context<? extends Resource> context) throws Exception {
-		System.out.println("Before Checkpoint");
+		 logger.info("Before Checkpoint");
 		
 		 handler.proxyStream(new ByteArrayInputStream(getApiGateWayRequest().getBytes(StandardCharsets.UTF_8)), 
 				 new ByteArrayOutputStream(), new MockLambdaContext());
 		//productDao.getProduct("0");
-		 System.out.println("After Checkpoint"); 
+		 logger.info("After Checkpoint"); 
 	}
 
 	@Override
 	public void afterRestore(org.crac.Context<? extends Resource> context) throws Exception {
-		System.out.println("After Restore");	
+		logger.info("After Restore");	
 	}
 	
 	private static String getApiGateWayRequest () {
