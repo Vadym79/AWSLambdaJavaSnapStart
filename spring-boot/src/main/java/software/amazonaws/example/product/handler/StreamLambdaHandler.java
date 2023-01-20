@@ -1,11 +1,9 @@
 package software.amazonaws.example.product.handler;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import org.crac.Core;
 import org.crac.Resource;
@@ -14,7 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import com.amazonaws.serverless.exceptions.ContainerInitializationException;
 import com.amazonaws.serverless.proxy.internal.testutils.MockLambdaContext;
+import com.amazonaws.serverless.proxy.model.ApiGatewayRequestIdentity;
 import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
+import com.amazonaws.serverless.proxy.model.AwsProxyRequestContext;
 import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
@@ -55,7 +55,6 @@ public class StreamLambdaHandler implements RequestStreamHandler, Resource {
     @Override
     public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context)
             throws IOException {
-    	
     	logger.info("entered generic stream lambda handler");
         handler.proxyStream(inputStream, outputStream, context);
     }
@@ -63,9 +62,12 @@ public class StreamLambdaHandler implements RequestStreamHandler, Resource {
 	@Override
 	public void beforeCheckpoint(org.crac.Context<? extends Resource> context) throws Exception {
 		 logger.info("Before Checkpoint");
-		
+		 handler.proxy(getAwsProxyRequest(), new MockLambdaContext());
+		 
+		 /*
 		 handler.proxyStream(new ByteArrayInputStream(getAPIGatewayRequest().getBytes(StandardCharsets.UTF_8)), 
 				 new ByteArrayOutputStream(), new MockLambdaContext());
+	     */
 		//productDao.getProduct("0");
 		 logger.info("After Checkpoint"); 
 	}
@@ -75,6 +77,21 @@ public class StreamLambdaHandler implements RequestStreamHandler, Resource {
 		logger.info("After Restore");	
 	}
 	
+    private static AwsProxyRequest getAwsProxyRequest () {
+    	final AwsProxyRequest awsProxyRequest = new AwsProxyRequest ();
+    	awsProxyRequest.setHttpMethod("GET");
+    	awsProxyRequest.setPath("/products/0");
+    	awsProxyRequest.setResource("/products/{id}");
+    	awsProxyRequest.setPathParameters(Map.of("id","0"));
+    	final AwsProxyRequestContext awsProxyRequestContext = new AwsProxyRequestContext();
+    	final ApiGatewayRequestIdentity apiGatewayRequestIdentity= new ApiGatewayRequestIdentity();
+    	apiGatewayRequestIdentity.setApiKey("blabla");
+    	awsProxyRequestContext.setIdentity(apiGatewayRequestIdentity);
+    	awsProxyRequest.setRequestContext(awsProxyRequestContext);
+    	return awsProxyRequest;		
+    }
+	
+    /*
 	private static String getAPIGatewayRequest () {
 		StringBuilder sb = new StringBuilder();
 	    sb.append("{\n")
@@ -89,5 +106,6 @@ public class StreamLambdaHandler implements RequestStreamHandler, Resource {
 		.append("}");
 	    return sb.toString();
 	}
+	*/
 	
 }

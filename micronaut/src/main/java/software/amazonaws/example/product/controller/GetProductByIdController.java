@@ -22,7 +22,12 @@ public class GetProductByIdController {
  
   @Get("/products/{id}")
   public Optional<Product> getProductById(@PathVariable String id) {
-	return productDao.getProduct(id);
+	Optional<Product> optionalProduct = productDao.getProduct(id);
+	if (optionalProduct.isPresent())
+		System.out.println(" product : " + optionalProduct.get());
+	else
+		System.out.println(" product not found ");
+	return optionalProduct;
   }
 
 }
