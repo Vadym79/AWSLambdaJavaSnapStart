@@ -21,8 +21,6 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 
 import software.amazonaws.Application;
-import software.amazonaws.example.product.dao.DynamoProductDao;
-import software.amazonaws.example.product.dao.ProductDao;
 
 
 public class StreamLambdaHandler implements RequestStreamHandler, Resource {
@@ -47,7 +45,7 @@ public class StreamLambdaHandler implements RequestStreamHandler, Resource {
         }
     }
     
-	private static final ProductDao productDao = new DynamoProductDao();
+	//private static final ProductDao productDao = new DynamoProductDao();
 	
 	public StreamLambdaHandler () {
 		Core.getGlobalContext().register(this);
@@ -66,7 +64,7 @@ public class StreamLambdaHandler implements RequestStreamHandler, Resource {
 	public void beforeCheckpoint(org.crac.Context<? extends Resource> context) throws Exception {
 		 logger.info("Before Checkpoint");
 		
-		 handler.proxyStream(new ByteArrayInputStream(getApiGateWayRequest().getBytes(StandardCharsets.UTF_8)), 
+		 handler.proxyStream(new ByteArrayInputStream(getAPIGatewayRequest().getBytes(StandardCharsets.UTF_8)), 
 				 new ByteArrayOutputStream(), new MockLambdaContext());
 		//productDao.getProduct("0");
 		 logger.info("After Checkpoint"); 
@@ -77,7 +75,7 @@ public class StreamLambdaHandler implements RequestStreamHandler, Resource {
 		logger.info("After Restore");	
 	}
 	
-	private static String getApiGateWayRequest () {
+	private static String getAPIGatewayRequest () {
 		StringBuilder sb = new StringBuilder();
 	    sb.append("{\n")
 		.append(" \"resource\": \"/products/{id}\",\n")
@@ -89,7 +87,7 @@ public class StreamLambdaHandler implements RequestStreamHandler, Resource {
 	    .append("      }\n")
 		.append(" }\n")
 		.append("}");
-	     return sb.toString();
+	    return sb.toString();
 	}
 	
 }
