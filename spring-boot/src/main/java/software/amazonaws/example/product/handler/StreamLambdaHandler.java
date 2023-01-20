@@ -79,56 +79,17 @@ public class StreamLambdaHandler implements RequestStreamHandler, Resource {
 	
 	private static String getApiGateWayRequest () {
 		StringBuilder sb = new StringBuilder();
-	       sb.append("{\n")
-		  .append(" \"resource\": \"/products/{id}\",\n")
-		  .append("  \"path\": \"/products/0\",\n")
-		  .append("   \"httpMethod\": \"GET\",\n")
-		   /*
-		  .append("  \"headers\": {},\n")
-		  .append("  \"multiValueHeaders\": {     },\n")
-		  .append("  \"queryStringParameters\": null,\n")
-		  .append("  \"multiValueQueryStringParameters\": null,\n")
-		  .append("  \"pathParameters\": {\n")
-		  .append("      \"id\": \"0\"\n")
-		  .append(" },\n")
-		  */
-		  //.append("  \"stageVariables\": null,\n")
-		  .append("  \"requestContext\": {\n")
-		  //.append("      \"resourceId\": \"sd5yqu\",\n")
-		  //.append("      \"resourcePath\": \"/products/{id}\",\n")
-		  //.append("      \"httpMethod\": \"GET\",\n")
-		  //.append("     \"extendedRequestId\": \"e5GtaFx1FiAFqMg=\",\n")
-		  //.append("     \"requestTime\": \"17/Jan/2023:14:59:59 +0000\",\n")
-		  //.append("      \"path\":  \"/prod/products/1\",\n")
-		  //.append("      \"accountId\": \"265634257610\",\n")
-		  //.append("      \"protocol\": \"HTTP/1.1\",\n")
-		  //.append("      \"stage\": \"prod\",\n")
-		  //.append("      \"domainPrefix\": \"4v2p3yxoph\",\n")
-		  //.append("     \"requestTimeEpoch\": 1673967599229,\n")
-		  //.append("     \"requestId\": \"fae79bb6-faee-4bb4-abfd-1f0e5b20625a\",\n")
-		  .append("     \"identity\": {\n")
-	      //.append("         \"cognitoIdentityPoolId\": null,\n")
-	      //.append("          \"cognitoIdentityId\": null,\n")
-	      .append("          \"apiKey\": \"a6ZbcDefQW12BN56WEM2\"\n")
-	      //.append("          \"principalOrgId\": null,\n")
-	      //.append("          \"cognitoAuthenticationType\": null,\n")
-	      //.append("         \"userArn\": null,\n")
-	      //.append("         \"apiKeyId\": \"jatl0igdai\",\n")
-	      //.append("         \"userAgent\": \"Apache-HttpClient/4.5.13 (Java/16.0.1)\",\n")
-	      //.append("         \"accountId\": null,\n")
-	      //.append("         \"caller\": null,\n")
-	      //.append("         \"sourceIp\": \"78.94.38.106\",\n")
-	      //.append("        \"accessKey\": null,\n")
-	      //.append("        \"cognitoAuthenticationProvider\": null,\n")
-	      //.append("        \"user\": null\n")
-	      .append("      }\n")
-		  //.append("      \"domainName\": \"4v2p3yxoph.execute-api.eu-central-1.amazonaws.com\",\n")
-		  //.append("      \"apiId\": \"4v2p3yxoph\"\n")
-		  .append(" }\n")
-		  //.append("  \"body\": null,\n")
-		  //.append("  \"isBase64Encoded\": false\n")
-		  .append("}");
-	      return sb.toString();
+	    sb.append("{\n")
+		.append(" \"resource\": \"/products/{id}\",\n")
+		.append("  \"path\": \"/products/0\",\n")
+		.append("   \"httpMethod\": \"GET\",\n")
+		.append("  \"requestContext\": {\n")
+		.append("     \"identity\": {\n")
+	    .append("          \"apiKey\": \"blabla\"\n")
+	    .append("      }\n")
+		.append(" }\n")
+		.append("}");
+	     return sb.toString();
 	}
 	
 }
