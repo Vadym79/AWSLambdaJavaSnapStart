@@ -12,16 +12,28 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
+
 import software.amazonaws.example.product.dao.DynamoProductDao;
 import software.amazonaws.example.product.dao.ProductDao;
 import software.amazonaws.example.product.entity.Product;
 
-public class GetProductByIdWithPrimingHandler implements RequestHandler<APIGatewayProxyRequestEvent, Optional<Product>>, Resource {
+public class GetProductByIdWithPrimingHandler implements 
+                 RequestHandler<APIGatewayProxyRequestEvent, Optional<Product>>, Resource {
 
 	private static final ProductDao productDao = new DynamoProductDao();
 	
+	
 	public GetProductByIdWithPrimingHandler () {
 		Core.getGlobalContext().register(this);
+	}
+	
+	@Override
+	public void beforeCheckpoint(org.crac.Context<? extends Resource> context) throws Exception {
+		productDao.getProduct("0");
+	}
+
+	@Override
+	public void afterRestore(org.crac.Context<? extends Resource> context) throws Exception {	
 	}
 
 	@Override
@@ -35,14 +47,5 @@ public class GetProductByIdWithPrimingHandler implements RequestHandler<APIGatew
 		return optionalProduct;
 	}
 
-	@Override
-	public void beforeCheckpoint(org.crac.Context<? extends Resource> context) throws Exception {
-		System.out.println("Before Checkpoint");
-		productDao.getProduct("0");
-	}
 
-	@Override
-	public void afterRestore(org.crac.Context<? extends Resource> context) throws Exception {
-		System.out.println("After Restore");	
-	}
 }
