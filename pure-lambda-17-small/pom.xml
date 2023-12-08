@@ -11,8 +11,6 @@
       <release.version>17</release.version>
       <maven.build.timestamp.format>yyyyMMdd'T'HHmmss</maven.build.timestamp.format>
       <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
-      <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
-      <maven-compiler-plugin.target>1.8</maven-compiler-plugin.target>
       <versions-maven-plugin.version>2.2</versions-maven-plugin.version>
       <maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
       <aws.lambda.java.core.version>1.2.2</aws.lambda.java.core.version>
@@ -54,8 +52,8 @@
             <artifactId>maven-compiler-plugin</artifactId>
             <version>${maven-compiler-plugin.version}</version>
             <configuration>
-               <source>${maven-compiler-plugin.source}</source>
-               <target>${maven-compiler-plugin.target}</target>
+               <source>17</source>
+               <target>17</target>
             </configuration>
          </plugin>
          <plugin>
