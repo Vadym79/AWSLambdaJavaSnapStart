@@ -29,11 +29,13 @@ public class GetProductByIdWithPrimingHandler implements
 	
 	@Override
 	public void beforeCheckpoint(org.crac.Context<? extends Resource> context) throws Exception {
-		productDao.getProduct("0");
+		Optional<Product> optionalProduct= productDao.getProduct("0");
+		//System.out.println(" primed product : " + optionalProduct.get());
 	}
 
 	@Override
 	public void afterRestore(org.crac.Context<? extends Resource> context) throws Exception {	
+	
 	}
 
 	@Override

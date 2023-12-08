@@ -14,6 +14,8 @@ Globals:
     CodeUri: target/aws-pure-lambda-snap-start-17-1.0.0-SNAPSHOT.jar
     Runtime: java17
     Timeout: 30 
+    SnapStart:
+      ApplyOn: PublishedVersions  
     MemorySize: 1024
     Environment:
       Variables:
@@ -77,11 +79,11 @@ Resources:
       UsagePlanName: AWSLambdaJava17SnapStartAPIUsagePlan
       Description: Usage plan for AWSLambdaJava17SnapStartAPI
       Quota:
-          Limit: 500000
+          Limit: 2000000
           Period: DAY
       Throttle:
           RateLimit:  10000
-          BurstLimit: 500   
+          BurstLimit: 5000   
 
   MyApiKey: 
     Type: AWS::ApiGateway::ApiKey
