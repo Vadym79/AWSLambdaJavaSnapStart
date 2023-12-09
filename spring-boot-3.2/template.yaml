@@ -11,7 +11,9 @@ Parameters:
     
 Globals:
   Function:
-    Handler: software.amazonaws.example.product.handler.StreamLambdaHandler::handleRequest
+    #Handler: software.amazonaws.example.product.handler.StreamLambdaHandler::handleRequest
+    Handler: software.amazonaws.example.product.handler.StreamLambdaHandlerWithDynamoDBRequestPriming::handleRequest
+    #Handler: software.amazonaws.example.product.handler.StreamLambdaHandlerWithWebRequestPriming::handleRequest
     CodeUri: target/aws-spring-boot-3.2-lambda-snap-start-1.0.0-SNAPSHOT.jar
     Runtime: java21
     Timeout: 30 
