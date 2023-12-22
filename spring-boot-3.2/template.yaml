@@ -11,15 +11,15 @@ Parameters:
     
 Globals:
   Function:
-    #Handler: software.amazonaws.example.product.handler.StreamLambdaHandler::handleRequest
-    Handler: software.amazonaws.example.product.handler.StreamLambdaHandlerWithDynamoDBRequestPriming::handleRequest
+    Handler: software.amazonaws.example.product.handler.StreamLambdaHandler::handleRequest
+    #Handler: software.amazonaws.example.product.handler.StreamLambdaHandlerWithDynamoDBRequestPriming::handleRequest
     #Handler: software.amazonaws.example.product.handler.StreamLambdaHandlerWithWebRequestPriming::handleRequest
     CodeUri: target/aws-spring-boot-3.2-lambda-snap-start-1.0.0-SNAPSHOT.jar
     Runtime: java21
     Timeout: 30 
     MemorySize: 1024
     SnapStart:
-      ApplyOn: PublishedVersions     
+      ApplyOn: PublishedVersions      
     Environment:
       Variables:
         JAVA_TOOL_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
@@ -82,11 +82,11 @@ Resources:
       UsagePlanName: AWSLambdaSpringBoot32JavaSnapStartAPIUsagePlan
       Description: Usage plan for AWSLambdaSpringBoot32JavaSnapStartAPI
       Quota:
-          Limit: 500
+          Limit: 2000000
           Period: DAY
       Throttle:
-          RateLimit:  1000
-          BurstLimit: 5000   
+          RateLimit:  10000
+          BurstLimit: 50000   
 
   MyApiKey: 
     Type: AWS::ApiGateway::ApiKey
@@ -168,10 +168,10 @@ Resources:
       KeySchema:
         - AttributeName: 'PK'
           KeyType: 'HASH'
-      #BillingMode: PAY_PER_REQUEST    
-      ProvisionedThroughput: 
-        ReadCapacityUnits: "1"
-        WriteCapacityUnits: "1"
+      BillingMode: PAY_PER_REQUEST    
+      #ProvisionedThroughput: 
+        #ReadCapacityUnits: "1"
+        #WriteCapacityUnits: "1"
       
 
 Outputs:
