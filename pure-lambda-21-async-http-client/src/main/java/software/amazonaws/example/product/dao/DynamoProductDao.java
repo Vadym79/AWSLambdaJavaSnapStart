@@ -38,15 +38,10 @@ public class DynamoProductDao implements ProductDao {
 
 	@Override
 	public Optional<Product> getProduct(String id) {
-		System.out.println("entered getProduct by id " + id);
 		CompletableFuture<GetItemResponse> getItemReponseAsync = dynamoDbClient.getItem(GetItemRequest.builder()
 				.key(Map.of("PK", AttributeValue.builder().s(id).build())).tableName(PRODUCT_TABLE_NAME).build());
-		System.out.println("build getItemReponse Async");
 		GetItemResponse getItemResponse = getItemReponseAsync.join();
-
-		System.out.println("after getProduct by id" + id);
 		if (getItemResponse.hasItem()) {
-			System.out.println("has item with id " + id);
 			return Optional.of(ProductMapper.productFromDynamoDB(getItemResponse.item()));
 		} else {
 			return Optional.empty();
@@ -69,10 +64,7 @@ public class DynamoProductDao implements ProductDao {
 	public Products getAllProduct() {
 		ScanResponse scanResponse = dynamoDbClient
 				.scan(ScanRequest.builder().tableName(PRODUCT_TABLE_NAME).limit(20).build()).join();
-
-		logger.info("Scan returned: {} item(s)", scanResponse.count());
 		List<Product> productList = new ArrayList<>();
-
 		for (Map<String, AttributeValue> item : scanResponse.items()) {
 			productList.add(ProductMapper.productFromDynamoDB(item));
 		}
