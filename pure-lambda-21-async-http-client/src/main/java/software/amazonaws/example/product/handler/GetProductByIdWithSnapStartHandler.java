@@ -28,7 +28,7 @@ public class GetProductByIdWithSnapStartHandler implements RequestHandler<APIGat
 	@Override
 	public Optional<Product> handleRequest(APIGatewayProxyRequestEvent event, Context context) {
 		String id = event.getPathParameters().get("id");
-		Optional<Product> optionalProduct = productDao.getProductNewClient(id);
+		Optional<Product> optionalProduct = productDao.getProduct(id);
 		if (optionalProduct.isPresent())
 			context.getLogger().log(" product : " + optionalProduct.get());
 		else

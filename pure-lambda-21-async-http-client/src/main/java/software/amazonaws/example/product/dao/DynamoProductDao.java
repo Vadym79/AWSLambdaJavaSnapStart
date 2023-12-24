@@ -3,7 +3,6 @@
 
 package software.amazonaws.example.product.dao;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,97 +27,55 @@ import software.amazonaws.example.product.entity.Product;
 import software.amazonaws.example.product.entity.Products;
 
 public class DynamoProductDao implements ProductDao {
-  private static final Logger logger = LoggerFactory.getLogger(DynamoProductDao.class);
-  private static final String PRODUCT_TABLE_NAME = System.getenv("PRODUCT_TABLE_NAME");
-  
-  private static final DynamoDbAsyncClient dynamoDbClient = DynamoDbAsyncClient.builder()
-    .credentialsProvider(DefaultCredentialsProvider.create())
-    .region(Region.EU_CENTRAL_1)
-    .httpClient(AwsCrtAsyncHttpClient.create())
-    //.httpClient(NettyNioAsyncHttpClient.create())
-    .build();
-  
-  /*
-  private static final DynamoDbAsyncClient newDynamoDbClient = DynamoDbAsyncClient.builder()
-		    .credentialsProvider(DefaultCredentialsProvider.create())
-		    .region(Region.EU_CENTRAL_1)
-		    //.httpClient(AwsCrtAsyncHttpClient.create())
-		    .httpClient(NettyNioAsyncHttpClient.create())
-		    .build();
-		  
-  */
-  @Override
-  public Optional<Product> getProductNewClient(String id) {
-	/*  
-	    System.out.println("entered getProduct by id "+id);
-	    CompletableFuture<GetItemResponse> getItemReponseAsync = newDynamoDbClient.getItem(GetItemRequest.builder()
-      .key(Map.of("PK", AttributeValue.builder().s(id).build()))
-      .tableName(PRODUCT_TABLE_NAME)
-      .build());
-	    System.out.println("build getItemReponse Async"); 		
-	 GetItemResponse getItemResponse = getItemReponseAsync.join();
-     System.out.println("after getProduct by id"+id);
-    if (getItemResponse.hasItem()) {
-    	  System.out.println("has item with id "+id);
-      return Optional.of(ProductMapper.productFromDynamoDB(getItemResponse.item()));
-    } else {
-      return Optional.empty();
-    }
-    */
-	  return Optional.empty();
-  }
+	private static final Logger logger = LoggerFactory.getLogger(DynamoProductDao.class);
+	private static final String PRODUCT_TABLE_NAME = System.getenv("PRODUCT_TABLE_NAME");
 
+	private static final DynamoDbAsyncClient dynamoDbClient = DynamoDbAsyncClient.builder()
+			.credentialsProvider(DefaultCredentialsProvider.create()).region(Region.EU_CENTRAL_1)
+			.httpClient(AwsCrtAsyncHttpClient.create())
+			// .httpClient(NettyNioAsyncHttpClient.create())
+			.build();
 
-  @Override
-  public Optional<Product> getProduct(String id) {
-	  
-	    System.out.println("entered getProduct by id "+id);
-	    CompletableFuture<GetItemResponse> getItemReponseAsync = dynamoDbClient.getItem(GetItemRequest.builder()
-      .key(Map.of("PK", AttributeValue.builder().s(id).build()))
-      .tableName(PRODUCT_TABLE_NAME)
-      .build());
-	    System.out.println("build getItemReponse Async"); 		
-	 GetItemResponse getItemResponse = getItemReponseAsync.join();
+	@Override
+	public Optional<Product> getProduct(String id) {
+		System.out.println("entered getProduct by id " + id);
+		CompletableFuture<GetItemResponse> getItemReponseAsync = dynamoDbClient.getItem(GetItemRequest.builder()
+				.key(Map.of("PK", AttributeValue.builder().s(id).build())).tableName(PRODUCT_TABLE_NAME).build());
+		System.out.println("build getItemReponse Async");
+		GetItemResponse getItemResponse = getItemReponseAsync.join();
 
-    System.out.println("after getProduct by id"+id);
-    if (getItemResponse.hasItem()) {
-    	  System.out.println("has item with id "+id);
-      return Optional.of(ProductMapper.productFromDynamoDB(getItemResponse.item()));
-    } else {
-      return Optional.empty();
-    }
-  }
+		System.out.println("after getProduct by id" + id);
+		if (getItemResponse.hasItem()) {
+			System.out.println("has item with id " + id);
+			return Optional.of(ProductMapper.productFromDynamoDB(getItemResponse.item()));
+		} else {
+			return Optional.empty();
+		}
+	}
 
-  @Override
-  public void putProduct(Product product) {
-    dynamoDbClient.putItem(PutItemRequest.builder()
-      .tableName(PRODUCT_TABLE_NAME)
-      .item(ProductMapper.productToDynamoDb(product))
-      .build()).join();
-  }
+	@Override
+	public void putProduct(Product product) {
+		dynamoDbClient.putItem(PutItemRequest.builder().tableName(PRODUCT_TABLE_NAME)
+				.item(ProductMapper.productToDynamoDb(product)).build()).join();
+	}
 
-  @Override
-  public void deleteProduct(String id) {
-    dynamoDbClient.deleteItem(DeleteItemRequest.builder()
-      .tableName(PRODUCT_TABLE_NAME)
-      .key(Map.of("PK", AttributeValue.builder().s(id).build()))
-      .build());
-  }
+	@Override
+	public void deleteProduct(String id) {
+		dynamoDbClient.deleteItem(DeleteItemRequest.builder().tableName(PRODUCT_TABLE_NAME)
+				.key(Map.of("PK", AttributeValue.builder().s(id).build())).build());
+	}
 
-  @Override
-  public Products getAllProduct() {
-    ScanResponse scanResponse = dynamoDbClient.scan(ScanRequest.builder()
-      .tableName(PRODUCT_TABLE_NAME)
-      .limit(20)
-      .build()).join();
+	@Override
+	public Products getAllProduct() {
+		ScanResponse scanResponse = dynamoDbClient
+				.scan(ScanRequest.builder().tableName(PRODUCT_TABLE_NAME).limit(20).build()).join();
 
-    logger.info("Scan returned: {} item(s)", scanResponse.count());
+		logger.info("Scan returned: {} item(s)", scanResponse.count());
+		List<Product> productList = new ArrayList<>();
 
-    List<Product> productList = new ArrayList<>();
-
-    for (Map<String, AttributeValue> item : scanResponse.items()) {
-      productList.add(ProductMapper.productFromDynamoDB(item));
-    }
-    return new Products(productList);
-  }
+		for (Map<String, AttributeValue> item : scanResponse.items()) {
+			productList.add(ProductMapper.productFromDynamoDB(item));
+		}
+		return new Products(productList);
+	}
 }

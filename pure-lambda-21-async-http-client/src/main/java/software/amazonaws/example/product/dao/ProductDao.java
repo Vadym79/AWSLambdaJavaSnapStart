@@ -11,8 +11,6 @@ import java.util.Optional;
 public interface ProductDao {
 
   Optional<Product> getProduct(String id);
-  
-  Optional<Product> getProductNewClient(String id);
 
   void putProduct(Product product);
 
