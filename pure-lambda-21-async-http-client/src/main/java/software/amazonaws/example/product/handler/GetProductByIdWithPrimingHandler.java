@@ -17,11 +17,11 @@ import software.amazonaws.example.product.dao.DynamoProductDao;
 import software.amazonaws.example.product.dao.ProductDao;
 import software.amazonaws.example.product.entity.Product;
 
-public class GetProductByIdWithSnapStartHandler implements RequestHandler<APIGatewayProxyRequestEvent, Optional<Product>>, Resource {
+public class GetProductByIdWithPrimingHandler implements RequestHandler<APIGatewayProxyRequestEvent, Optional<Product>>, Resource {
 
 	private static final ProductDao productDao = new DynamoProductDao();
 
-	public GetProductByIdWithSnapStartHandler () {
+	public GetProductByIdWithPrimingHandler () {
 		Core.getGlobalContext().register(this);
 	}
 
