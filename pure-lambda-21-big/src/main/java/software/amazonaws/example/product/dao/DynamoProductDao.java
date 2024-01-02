@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.amazonaws.xray.interceptors.TracingInterceptor;
 
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
@@ -35,6 +36,7 @@ public class DynamoProductDao implements ProductDao {
     .credentialsProvider(DefaultCredentialsProvider.create())
     .region(Region.EU_CENTRAL_1)
     .overrideConfiguration(ClientOverrideConfiguration.builder()
+       .addExecutionInterceptor(new TracingInterceptor())
       .build())
     .build();
 
