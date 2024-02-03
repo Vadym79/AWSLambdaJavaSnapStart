@@ -8,9 +8,9 @@ import software.amazonaws.example.product.controller.ProductController;
 
 
 
-
 @Import({ProductController.class })
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
+
 public class Application {
 
     public static void main(String[] args) {

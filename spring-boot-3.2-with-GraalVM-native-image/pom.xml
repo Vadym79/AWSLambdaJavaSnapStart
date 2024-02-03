@@ -173,6 +173,7 @@
               </execution>
             </executions>
             <configuration>
+              <mainClass>software.amazonaws.Application</mainClass>
               <buildArgs>
                 <buildArg>
                   --enable-url-protocols=http,https
