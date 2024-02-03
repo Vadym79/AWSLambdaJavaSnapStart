@@ -18,3 +18,10 @@ sudo dnf install gcc glibc-devel zlib-devel libstdc++-static
 sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
 sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
 sudo yum install -y apache-maven
+
+5) Clone git Repo
+git clone https://github.com/Vadym79/AWSLambdaJavaSnapStart.git
+
+6) Build Native Image
+
+mvn -Pnative clean package
