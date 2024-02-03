@@ -174,8 +174,12 @@
             </executions>
             <configuration>
               <buildArgs>
-                --enable-url-protocols=http,https
-                -H:+AddAllCharsets
+                <buildArg>
+                  --enable-url-protocols=http,https
+                </buildArg>
+                <buildArg>
+               	   -H:+AddAllCharsets
+                </buildArg>
               </buildArgs>
             </configuration>
           </plugin>
