@@ -15,7 +15,7 @@ Globals:
     #Handler: software.amazonaws.example.product.handler.StreamLambdaHandlerWithDynamoDBRequestPriming::handleRequest
     #Handler: software.amazonaws.example.product.handler.StreamLambdaHandlerWithWebRequestPriming::handleRequest
     CodeUri: target/function-native-zip.zip
-    Runtime: provided
+    Runtime: provided.al2023
     Timeout: 30 
     MemorySize: 1024   
     Environment:
