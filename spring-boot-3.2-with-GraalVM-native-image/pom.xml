@@ -167,7 +167,9 @@
             <configuration>
               <mainClass>software.amazonaws.Application</mainClass>
                <buildArgs>
+                 <buildArg>
                    --no-fallback
+                 </buildArg>  
                </buildArgs>
             </configuration>
           </plugin>
