@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  AWSLambdaSpringBootJavaSnapStartTest
+  AWSLambdaSpringBootJavaGraalVMNativeTest
   Sample SAM Template 
 
 Parameters:
@@ -31,8 +31,8 @@ Resources:
     DependsOn: MyApiCWLRoleArn 
     Properties:
       StageName: !Ref Stage
-      Name: AWSLambdaSpringBoot32JavaSnapStartAPI
-      Description: Api for AWSLambdaSpringBoot32JavaSnapStart
+      Name: AWSLambdaSpringBoot32JavaGraalVMNativeAPI
+      Description: Api for AWSLambdaSpringBoot32JavaGraalVMNative
       AccessLogSetting:
         DestinationArn: !Sub ${MyApiLogGroup.Arn} # This Log Group is already created within our SAM Template
         Format: "{'integrationLatency':'$context.integrationLatency', 'latency':'$context.responseLatency', 'requestId':'$context.requestId', 'ip': '$context.identity.sourceIp', 'caller':'$context.identity.caller', 'user':'$context.identity.user','requestTime':'$context.requestTime', 'xrayTraceId':'$context.xrayTraceId', 'wafResponseCode':'$context.wafResponseCode', 'httpMethod':'$context.httpMethod','resourcePath':'$context.resourcePath', 'status':'$context.status','protocol':'$context.protocol', 'responseLength':'$context.responseLength' }"
@@ -79,8 +79,8 @@ Resources:
       ApiStages: 
         - ApiId: !Ref MyApi
           Stage: !Ref Stage
-      UsagePlanName: AWSLambdaSpringBoot32JavaSnapStartAPIUsagePlan
-      Description: Usage plan for AWSLambdaSpringBoot32JavaSnapStartAPI
+      UsagePlanName: AWSLambdaSpringBoot32JavaGraalVMNativeAPIUsagePlan
+      Description: Usage plan for AWSLambdaSpringBoot32JavaGraalVMNativeAPI
       Quota:
           Limit: 2000000
           Period: DAY
@@ -93,11 +93,11 @@ Resources:
     DependsOn:  
        - MyApiStage
     Properties: 
-      Name: "AWSLambdaSpringBoot32JavaSnapStartApiKey"
-      Description: "AWSLambdaSpringBoot32JavaSnapStart API Key"
+      Name: "AWSLambdaSpringBoot32JavaGraalVMNativeApiKey"
+      Description: "AWSLambdaSpringBoot32JavaGraalVMNative API Key"
       Enabled: true
       GenerateDistinctId: false
-      Value: a6ZbcDefQW12BN56WEI2
+      Value: a6ZbcDefQW12BN56WEF2
       StageKeys:
         - RestApiId: !Ref MyApi
           StageName: !Ref Stage
@@ -115,7 +115,7 @@ Resources:
   GetProductByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetProductByIdWithSpringBoot32
+      FunctionName: GetProductByIdWithSpringBoot32GraalVMNative
       AutoPublishAlias: liveVersion
       Policies:
         - DynamoDBReadPolicy:
@@ -138,7 +138,7 @@ Resources:
   PutProductFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: PutProductWithSpringBoot32
+      FunctionName: PutProductWithSpringBoot32GraalVMNative
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref ProductsTable
@@ -159,7 +159,7 @@ Resources:
   ProductsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "AWSLambdaSpringBoot32JavaSnapStartProductsTable"
+      TableName: "AWSLambdaSpringBoot32JavaGraalVMNativeProductsTable"
       PointInTimeRecoverySpecification:
          PointInTimeRecoveryEnabled: true
       AttributeDefinitions:
