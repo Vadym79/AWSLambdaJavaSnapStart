@@ -155,6 +155,9 @@
                <plugin>
                     <groupId>org.graalvm.buildtools</groupId>
                     <artifactId>native-maven-plugin</artifactId>
+                     <configuration>
+				        <mainClass>software.amazonaws.Application</mainClass>
+				     </configuration>               
                     <executions>
                         <execution>
                             <id>build-native</id>
