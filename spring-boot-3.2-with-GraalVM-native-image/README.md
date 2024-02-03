@@ -28,3 +28,5 @@ mvn -Pnative clean package
 
 7)Connect Cloud9 to GitHub (https://aws.plainenglish.io/how-to-use-aws-cloud9-with-github-3136692fa44d)
 8) Push to GitHub, rename the native image in the zip to bootstrap
+
+9( Resize Cloud9 Storage https://ec2spotworkshops.com/ecs-spot-capacity-providers/workshopsetup/resize_ebs.html
