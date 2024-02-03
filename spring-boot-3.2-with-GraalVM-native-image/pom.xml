@@ -174,7 +174,7 @@
             </executions>
             <configuration>
               <buildArgs>
-                --enable-url-protocols=http
+                --enable-url-protocols=http,https
                 -H:+AddAllCharsets
               </buildArgs>
             </configuration>
