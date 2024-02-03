@@ -181,6 +181,9 @@
                 <buildArg>
                	   -H:+AddAllCharsets
                 </buildArg>
+                <buildArg>
+               	   CGO_ENABLED=0
+                </buildArg>
               </buildArgs>
             </configuration>
           </plugin>

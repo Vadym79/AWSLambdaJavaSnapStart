@@ -25,3 +25,6 @@ git clone https://github.com/Vadym79/AWSLambdaJavaSnapStart.git
 6) Build Native Image
 
 mvn -Pnative clean package
+
+7)Connect Cloud9 to GitHub (https://aws.plainenglish.io/how-to-use-aws-cloud9-with-github-3136692fa44d)
+8) Push to GitHub, rename the native image in the zip to bootstrap
