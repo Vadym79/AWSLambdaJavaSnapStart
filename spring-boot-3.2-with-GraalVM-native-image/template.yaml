@@ -11,7 +11,9 @@ Parameters:
     
 Globals:
   Function:
-    Handler: software.amazonaws.example.product.handler.StreamLambdaHandler::handleRequest
+  
+    Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+    #Handler: software.amazonaws.example.product.handler.StreamLambdaHandler::handleRequest
     #Handler: software.amazonaws.example.product.handler.StreamLambdaHandlerWithDynamoDBRequestPriming::handleRequest
     #Handler: software.amazonaws.example.product.handler.StreamLambdaHandlerWithWebRequestPriming::handleRequest
     CodeUri: target/function-native-zip.zip
@@ -113,6 +115,9 @@ Resources:
   GetProductByIdFunction:
     Type: AWS::Serverless::Function
     Properties:
+        Environment:
+          Variables:
+            SPRING_CLOUD_FUNCTION_DEFINITION: getProductById
       FunctionName: GetProductByIdWithSpringBoot32GraalVMNative
       AutoPublishAlias: liveVersion
       Policies:
@@ -136,6 +141,9 @@ Resources:
   PutProductFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Environment:
+          Variables:
+            SPRING_CLOUD_FUNCTION_DEFINITION: createProduct
       FunctionName: PutProductWithSpringBoot32GraalVMNative
       Policies:
         - DynamoDBCrudPolicy:
