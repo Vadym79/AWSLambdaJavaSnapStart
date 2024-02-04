@@ -4,30 +4,34 @@
 package software.amazonaws.example.product.handler;
 
 import java.util.Optional;
+import java.util.function.Function;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 
 import software.amazonaws.example.product.dao.DynamoProductDao;
-import software.amazonaws.example.product.dao.ProductDao;
 import software.amazonaws.example.product.entity.Product;
 
 @Component
-public class GetProductByIdHandler implements RequestHandler<APIGatewayProxyRequestEvent, Optional<Product>> {
+public class GetProductByIdHandler implements Function<APIGatewayProxyRequestEvent, Optional<Product>> {
 
-	private static final ProductDao productDao = new DynamoProductDao();
+	@Autowired
+	private DynamoProductDao productDao;
+	
+    private static final Logger logger = LoggerFactory.getLogger(GetProductByIdHandler.class);
 
 	@Override
-	public Optional<Product> handleRequest(APIGatewayProxyRequestEvent event, Context context) {
+	public Optional<Product> apply(APIGatewayProxyRequestEvent event) {
 		String id = event.getPathParameters().get("id");
 		Optional<Product> optionalProduct = productDao.getProduct(id);
 		if (optionalProduct.isPresent())
-			context.getLogger().log(" product : " + optionalProduct.get());
+			logger.info(" product : " + optionalProduct.get());
 		else
-			context.getLogger().log(" product not found ");
+			logger.info(" product not found ");
 		return optionalProduct;
 	}
 
