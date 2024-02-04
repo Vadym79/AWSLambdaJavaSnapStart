@@ -1,4 +1,4 @@
-0) Install Docker, Install git or use Cloud9 EC2 intance with those pre-installed
+0) AWS setup m5 Cloud9 EC2 instance
 
 1) Install SDKMAN   (https://sdkman.io/)
 curl -s "https://get.sdkman.io" | bash
@@ -27,6 +27,6 @@ git clone https://github.com/Vadym79/AWSLambdaJavaSnapStart.git
 mvn -Pnative clean package
 
 7)Connect Cloud9 to GitHub (https://aws.plainenglish.io/how-to-use-aws-cloud9-with-github-3136692fa44d)
-8) Push to GitHub, rename the native image in the zip to bootstrap
 
-9( Resize Cloud9 Storage https://ec2spotworkshops.com/ecs-spot-capacity-providers/workshopsetup/resize_ebs.html
+
+8) Resize Cloud9 Storage if required https://ec2spotworkshops.com/ecs-spot-capacity-providers/workshopsetup/resize_ebs.html
