@@ -74,6 +74,11 @@
 			<version>3.11.3</version>
 		</dependency>
 		<dependency>
+		    <groupId>com.amazonaws</groupId>
+		    <artifactId>aws-lambda-java-serialization</artifactId>
+		    <version>1.1.5</version>
+		</dependency>
+		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>url-connection-client</artifactId>
 		</dependency>
@@ -109,6 +114,38 @@
 	</dependencyManagement>
 	<build>
 	<plugins>
+     <plugin>
+       <artifactId>maven-dependency-plugin</artifactId>
+       <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>prepare-package</phase>
+            <goals>
+                <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+                <outputDirectory>${project.build.directory}/classes/lib</outputDirectory>
+                <overWriteReleases>false</overWriteReleases>
+                <overWriteSnapshots>false</overWriteSnapshots>
+                <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>       
+         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+            <archive>
+                <manifest>
+                  <addClasspath>true</addClasspath>  
+                </manifest>
+                <manifestEntries>
+                  <Class-Path>lib/</Class-Path>
+                </manifestEntries>
+            </archive>
+        </configuration>
+      </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -120,7 +157,7 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>
 			</plugin>
-			
+			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -143,7 +180,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+			-->
 		</plugins>
 	</build>
 	<profiles>
