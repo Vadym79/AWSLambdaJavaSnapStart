@@ -151,13 +151,6 @@
 	        <configuration>
 	          <skip>false</skip>
 	          <mainClass>com.formkiq.lambda.runtime.graalvm.LambdaRuntime</mainClass>
-	          <buildArgs>
-	            --no-fallback
-	            --enable-http
-	            --initialize-at-build-time=org.slf4j.simple.SimpleLogger\,org.slf4j.LoggerFactory
-	            -H:ReflectionConfigurationFiles=../src/main/reflect.json
-	            TraceClassInitialization=org.slf4j.impl.SimpleLogger
-	          </buildArgs>
 	        </configuration>
 	      </plugin>
           <plugin>
