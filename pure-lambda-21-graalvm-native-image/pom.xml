@@ -151,6 +151,11 @@
 	        <configuration>
 	          <skip>false</skip>
 	          <mainClass>com.formkiq.lambda.runtime.graalvm.LambdaRuntime</mainClass>
+	          <buildArgs>
+	            --no-fallback
+	            --enable-http
+	            -H:ReflectionConfigurationFiles=../src/main/reflect.json
+	          </buildArgs>
 	        </configuration>
 	      </plugin>
           <plugin>
