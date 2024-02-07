@@ -154,9 +154,8 @@
 	          <buildArgs>
 	            <buildArg>--no-fallback</buildArg>
 	            <buildArg>--enable-http</buildArg>
-	            <buildArg>--initialize-at-build-time=org.slf4j.simple.SimpleLogger\
-                           ,org.slf4j.LoggerFactory
-                </buildArg>
+	            <buildArg>--initialize-at-build-time=org.slf4j.impl.SimpleLogger</buildArg>
+	            <buildArg>--initialize-at-build-time=org.slf4j.LoggerFactory</buildArg>
 	            <buildArg>-H:ReflectionConfigurationFiles=../src/main/reflect.json</buildArg>
 	          </buildArgs>
 	        </configuration>
