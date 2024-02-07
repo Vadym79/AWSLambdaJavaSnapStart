@@ -11,8 +11,8 @@ Parameters:
     
 Globals:
   Function:
-   CodeUri: target/function-native-zip.zip
-   Runtime: provided.al2023
+    CodeUri: target/function-native-zip.zip
+    Runtime: provided.al2023
     Timeout: 30 
     MemorySize: 1024  
     Environment:
