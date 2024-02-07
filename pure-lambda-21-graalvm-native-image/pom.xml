@@ -151,6 +151,7 @@
 	        <configuration>
 	          <skip>false</skip>
 	          <mainClass>com.formkiq.lambda.runtime.graalvm.LambdaRuntime</mainClass>
+	          <imageName>aws-pure-lambda-java21-graalvm-native-image</imageName>
 	          <buildArgs>
 	            --no-fallback
 	            --enable-http
