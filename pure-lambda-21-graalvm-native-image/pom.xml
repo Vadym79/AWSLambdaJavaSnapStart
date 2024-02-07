@@ -136,7 +136,7 @@
                </execution>
             </executions>
          </plugin>        
-	      <plugin>
+	     <plugin>
 	        <groupId>org.graalvm.nativeimage</groupId>
 	        <artifactId>native-image-maven-plugin</artifactId>
 	        <version>21.2.0</version>
@@ -158,6 +158,25 @@
 	          </buildArgs>
 	        </configuration>
 	      </plugin>
+          <plugin>
+              <artifactId>maven-assembly-plugin</artifactId>
+              <executions>
+                 <execution>
+                    <id>native-zip</id>
+                    <phase>package</phase>
+                    <goals>
+                       <goal>single</goal>
+                    </goals>
+                    <inherited>false</inherited>
+                 </execution>
+              </executions>
+              <configuration>
+                 <finalName>function</finalName>
+                 <descriptors>
+                    <descriptor>src/assembly/native.xml</descriptor>
+                 </descriptors>
+              </configuration>
+           </plugin>
       </plugins>
    </build>
 </project>
