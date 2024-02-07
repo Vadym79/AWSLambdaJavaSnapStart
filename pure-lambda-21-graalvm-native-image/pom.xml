@@ -155,7 +155,6 @@
 	          <buildArgs>
 	            --no-fallback
 	            --enable-http
-	            --pgo-instrument
 	            -H:ReflectionConfigurationFiles=../src/main/reflect.json
 	          </buildArgs>
 	        </configuration>
