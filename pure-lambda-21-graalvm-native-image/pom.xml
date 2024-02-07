@@ -155,6 +155,7 @@
 	            --no-fallback
 	            --enable-http
 	            -H:ReflectionConfigurationFiles=../src/main/reflect.json
+	            --initialize-at-run-time=org.slf4j.simple.SimpleLogger
 	          </buildArgs>
 	        </configuration>
 	      </plugin>
