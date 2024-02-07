@@ -156,7 +156,7 @@
 	            <buildArg>--enable-http</buildArg>
 	            <buildArg>--initialize-at-build-time=org.slf4j.impl.SimpleLogger,org.slf4j.LoggerFactory</buildArg>
 	            <buildArg>-H:ReflectionConfigurationFiles=../src/main/reflect.json</buildArg>
-	            <buildArg>-H:+TraceClassInitialization</buildArg>
+	            <buildArg>TraceClassInitialization=org.slf4j.impl.SimpleLogger</buildArg>
 	          </buildArgs>
 	        </configuration>
 	      </plugin>
