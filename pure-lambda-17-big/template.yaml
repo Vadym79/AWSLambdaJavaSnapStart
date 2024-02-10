@@ -13,8 +13,8 @@ Globals:
   Function:
     CodeUri: target/aws-pure-lambda-snap-start-17-big-1.0.0-SNAPSHOT.jar
     Runtime: java17
-    #SnapStart:
-      #ApplyOn: PublishedVersions     
+    SnapStart:
+      ApplyOn: PublishedVersions     
     Timeout: 30 
     MemorySize: 1024
     Tracing: Active
@@ -154,7 +154,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /products/{id}
+            Path: /products
             Method: put
 
   PutProductFunctionLogGroup:
