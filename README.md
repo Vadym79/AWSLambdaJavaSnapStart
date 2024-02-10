@@ -3,7 +3,7 @@
 ## Architecture
 
 <p align="center">
-  <img src="/src/main/resources/img/app_arch.png" alt="Application Architecture"/>
+  <img src="pure-lambda-21/src/main/resources/img/app_arch.png" alt="Application Architecture"/>
 </p>
 
 ## Project Description
