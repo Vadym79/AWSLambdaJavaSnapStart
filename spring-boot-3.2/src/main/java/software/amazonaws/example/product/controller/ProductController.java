@@ -37,10 +37,9 @@ public class ProductController {
 
 	}
 
-	@RequestMapping(path = "/products/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void createProduct(@PathVariable("id") String id, @RequestBody Product product) {
-		logger.info("entered createProduct method with id " + id);
-		product.setId(id);
+	@RequestMapping(path = "/products", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void createProduct(@RequestBody Product product) {
+		logger.info("entered createProduct method with id " + product.getId());
 		productDao.putProduct(product);
 	}
 }
