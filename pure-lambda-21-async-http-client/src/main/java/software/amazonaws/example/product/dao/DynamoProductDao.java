@@ -9,9 +9,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.http.crt.AwsCrtAsyncHttpClient;
 import software.amazon.awssdk.regions.Region;
@@ -27,13 +24,13 @@ import software.amazonaws.example.product.entity.Product;
 import software.amazonaws.example.product.entity.Products;
 
 public class DynamoProductDao implements ProductDao {
-	private static final Logger logger = LoggerFactory.getLogger(DynamoProductDao.class);
+
 	private static final String PRODUCT_TABLE_NAME = System.getenv("PRODUCT_TABLE_NAME");
 
 	private static final DynamoDbAsyncClient dynamoDbClient = DynamoDbAsyncClient.builder()
 			.credentialsProvider(DefaultCredentialsProvider.create()).region(Region.EU_CENTRAL_1)
 			.httpClient(AwsCrtAsyncHttpClient.create())
-			// .httpClient(NettyNioAsyncHttpClient.create())
+			 //.httpClient(NettyNioAsyncHttpClient.create())
 			.build();
 
 	@Override

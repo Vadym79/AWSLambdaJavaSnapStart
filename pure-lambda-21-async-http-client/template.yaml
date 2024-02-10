@@ -14,7 +14,7 @@ Globals:
     CodeUri: target/aws-pure-lambda-snap-start-21-async-http-client-1.0.0-SNAPSHOT.jar
     Runtime: java21
     SnapStart:
-      ApplyOn: PublishedVersions     
+     ApplyOn: PublishedVersions     
     Timeout: 30 
     MemorySize: 1024 
     Tracing: Active
@@ -60,7 +60,7 @@ Resources:
       UsagePlanName: AWSLambdaJava21SnapStartAsyncAPIUsagePlan
       Description: Usage plan for AWSLambdaJava21SnapStartAPI
       Quota:
-          Limit: 500000
+          Limit: 2000000
           Period: DAY
       Throttle:
           RateLimit:  10000
@@ -154,7 +154,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /products/{id}
+            Path: /products
             Method: put
 
   PutProductFunctionLogGroup:
