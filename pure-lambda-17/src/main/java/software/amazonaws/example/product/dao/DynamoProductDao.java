@@ -33,10 +33,13 @@ public class DynamoProductDao implements ProductDao {
   private static final DynamoDbClient dynamoDbClient = DynamoDbClient.builder()
     .credentialsProvider(DefaultCredentialsProvider.create())
     .region(Region.EU_CENTRAL_1)
+     //.httpClient(UrlConnectionHttpClient.create())
+    //.httpClient(AwsCrtHttpClient.create())
     .overrideConfiguration(ClientOverrideConfiguration.builder()
       .build())
     .build();
 
+  
   @Override
   public Optional<Product> getProduct(String id) {
     GetItemResponse getItemResponse = dynamoDbClient.getItem(GetItemRequest.builder()
