@@ -57,18 +57,20 @@
          </exclusions>
       </dependency>
     
-    <!--
+    
     <dependency>
         <groupId>software.amazon.awssdk</groupId>
         <artifactId>netty-nio-client</artifactId>
     </dependency>
-    -->  
+  
     
+    <!--
 	<dependency>
 	    <groupId>software.amazon.awssdk</groupId>
 	    <artifactId>aws-crt-client</artifactId>
 	</dependency>
-	
+	  -->  
+	  
     <dependency>
        <groupId>org.slf4j</groupId>
        <artifactId>slf4j-simple</artifactId>

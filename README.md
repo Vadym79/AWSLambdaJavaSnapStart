@@ -20,8 +20,8 @@ I tested different impact of the Lambda cold and warm start of the following:
 - Deployment package sizes  
 - Lambda memory settings  
 - Java compilation options   
-- Synchronous HTTP clients (Url Connection, Apache, synch AWS CRT)  
-- Asynchronous HTTP clients (Netty NIO, asynch. AWS CRT)  
+- Synchronous HTTP clients (Url Connection, Apache, synchronous AWS CRT)  
+- Asynchronous HTTP clients (Netty NIO, asynchronous AWS CRT)  
 
 To the explored AWS Lambda Java Runtimes belong:  
 - Java 11  
@@ -60,4 +60,4 @@ In order to user AWS Lambda SnapStart uncomment both lines above. For different 
 
 ## Further Readings 
 
-You can read my article series "AWS Lambda SnapStart" on https://dev.to/vkazulkin/measuring-java-11-lambda-cold-starts-with-snapstart-part-1-first-impressions-30a4
+You can read my article series [AWS Lambda SnapStart](https://dev.to/vkazulkin/measuring-java-11-lambda-cold-starts-with-snapstart-part-1-first-impressions-30a4)

@@ -28,8 +28,6 @@ import io.quarkus.runtime.Startup;
 @Startup
 @ApplicationScoped
 public class ProductAPIResource implements Resource {
-
-	//private static final ProductDao productDao = new DynamoProductDao();
 	
     @PostConstruct
 	public void init () {
@@ -38,37 +36,14 @@ public class ProductAPIResource implements Resource {
 
 	@Override
 	public void beforeCheckpoint(org.crac.Context<? extends Resource> context) throws Exception {
-		System.out.println("Before Checkpoint");
 		new QuarkusStreamHandler().handleRequest
-		 (new ByteArrayInputStream(convertAwsProxRequestToJsonBytes()), new ByteArrayOutputStream(), new MockLambdaContext());
-		//productDao.getProduct("0");
-		System.out.println("After Checkpoint");
+		 (new ByteArrayInputStream(convertAwsProxRequestToJsonBytes()), 
+				 new ByteArrayOutputStream(), new MockLambdaContext());
 	}
 
 	@Override
 	public void afterRestore(org.crac.Context<? extends Resource> context) throws Exception {
-		System.out.println("After Restore");	
 	}
-	
-	/*
-	private static String getAPIGatewayRequest () {
-		StringBuilder sb = new StringBuilder();
-	    sb.append("{\n")
-		.append(" \"resource\": \"/products/{id}\",\n")
-		.append("  \"path\": \"/products/0\",\n")
-		.append("   \"httpMethod\": \"GET\",\n")
-		.append("\"pathParameters\": {\n")
-		.append("    \"id\":  \"0\"\n")
-		.append("},\n")
-		.append("  \"requestContext\": {\n")
-		.append("     \"identity\": {\n")
-	    .append("          \"apiKey\": \"blabla\"\n")
-	    .append("      }\n")
-		.append(" }\n")
-		.append("}");
-	    return sb.toString();
-	}
-	*/
 	
 	private static byte[] convertAwsProxRequestToJsonBytes () throws JsonProcessingException {
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
