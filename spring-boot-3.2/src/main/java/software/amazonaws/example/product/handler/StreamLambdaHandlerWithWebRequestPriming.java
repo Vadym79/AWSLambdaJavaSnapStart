@@ -86,22 +86,4 @@ public class StreamLambdaHandlerWithWebRequestPriming implements RequestStreamHa
     	awsProxyRequest.setRequestContext(awsProxyRequestContext);
     	return awsProxyRequest;		
     }
-	
-    /*
-	private static String getAPIGatewayRequest () {
-		StringBuilder sb = new StringBuilder();
-	    sb.append("{\n")
-		.append(" \"resource\": \"/products/{id}\",\n")
-		.append("  \"path\": \"/products/0\",\n")
-		.append("   \"httpMethod\": \"GET\",\n")
-		.append("  \"requestContext\": {\n")
-		.append("     \"identity\": {\n")
-	    .append("          \"apiKey\": \"blabla\"\n")
-	    .append("      }\n")
-		.append(" }\n")
-		.append("}");
-	    return sb.toString();
-	}
-	*/
-	
 }
