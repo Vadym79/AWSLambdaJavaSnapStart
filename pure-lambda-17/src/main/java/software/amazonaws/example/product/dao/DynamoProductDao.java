@@ -4,6 +4,8 @@
 package software.amazonaws.example.product.dao;
 
 
+import java.net.http.HttpClient;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
+import software.amazon.awssdk.http.SdkHttpClient;
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
+
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -25,20 +30,39 @@ import software.amazon.awssdk.services.dynamodb.model.ScanRequest;
 import software.amazon.awssdk.services.dynamodb.model.ScanResponse;
 import software.amazonaws.example.product.entity.Product;
 import software.amazonaws.example.product.entity.Products;
+import java.net.URI;
 
 public class DynamoProductDao implements ProductDao {
   private static final Logger logger = LoggerFactory.getLogger(DynamoProductDao.class);
   private static final String PRODUCT_TABLE_NAME = System.getenv("PRODUCT_TABLE_NAME");
 
-  private static final DynamoDbClient dynamoDbClient = DynamoDbClient.builder()
-    .credentialsProvider(DefaultCredentialsProvider.create())
-    .region(Region.EU_CENTRAL_1)
-     //.httpClient(UrlConnectionHttpClient.create())
-    //.httpClient(AwsCrtHttpClient.create())
-    .overrideConfiguration(ClientOverrideConfiguration.builder()
-      .build())
-    .build();
-
+  private static final String ENDPOINT = System.getenv("AWS_ENDPOINT_URL_DYNAMODB");
+  
+  private static final SdkHttpClient httpClientForPriming = ApacheHttpClient.builder().
+		  connectionTimeToLive(Duration.ofSeconds(1)).
+		  socketTimeout(Duration.ofSeconds(1)).
+		  connectionTimeout(Duration.ofSeconds(1)).
+		  build();
+  
+  private static final SdkHttpClient httpClient = ApacheHttpClient.builder().
+		  build();
+  
+  private static final DynamoDbClient dynamoDbClient = getDynamoClient(httpClientForPriming);
+  
+  private static DynamoDbClient getDynamoClient (SdkHttpClient httpClient) {
+		if (ENDPOINT != null) {
+			return DynamoDbClient.builder().endpointOverride(URI.create(ENDPOINT))
+					.credentialsProvider(DefaultCredentialsProvider.create()).region(Region.EU_CENTRAL_1)
+					.httpClient(httpClient)
+					.overrideConfiguration(ClientOverrideConfiguration.builder().build())
+					.httpClient(httpClient).build();
+		} else {
+			return DynamoDbClient.builder().credentialsProvider(DefaultCredentialsProvider.create())
+					.region(Region.EU_CENTRAL_1).httpClient(httpClient).overrideConfiguration(ClientOverrideConfiguration.builder().build())
+					.httpClient(httpClient).build();
+		}
+		
+	}  
   
   @Override
   public Optional<Product> getProduct(String id) {
@@ -48,6 +72,7 @@ public class DynamoProductDao implements ProductDao {
       .build());
     if (getItemResponse.hasItem()) {
       return Optional.of(ProductMapper.productFromDynamoDB(getItemResponse.item()));
+      
     } else {
       return Optional.empty();
     }
