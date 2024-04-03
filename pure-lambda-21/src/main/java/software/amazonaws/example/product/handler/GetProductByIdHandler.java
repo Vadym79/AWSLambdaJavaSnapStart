@@ -33,7 +33,7 @@ public class GetProductByIdHandler
 				return new APIGatewayProxyResponseEvent().withStatusCode(HttpStatusCode.NOT_FOUND)
 						.withBody("Product with id = " + id + " not found");
 			}
-			context.getLogger().log(" product " + optionalProduct.get() + " not found ");
+			context.getLogger().log(" product " + optionalProduct.get() + " found ");
 			return new APIGatewayProxyResponseEvent().withStatusCode(HttpStatusCode.OK)
 					.withBody(objectMapper.writeValueAsString(optionalProduct.get()));
 		} catch (Exception je) {
