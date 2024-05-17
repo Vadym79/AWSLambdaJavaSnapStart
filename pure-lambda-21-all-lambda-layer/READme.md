@@ -1,3 +1,4 @@
+mvn clean package
 mkdir java
 mkdir java/lib
 cp -r target/aws-pure-java-21-all-lambda-layer-1.0.0-SNAPSHOT.jar java/lib/
