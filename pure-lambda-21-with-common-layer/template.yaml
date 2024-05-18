@@ -96,7 +96,7 @@ Resources:
       FunctionName: GetProductByIdWithPureJava21LambdaWithCommonLayer
       AutoPublishAlias: liveVersion
       Layers:
-        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:aws-pure-java-21-common-lambda-layer:1
+        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:aws-pure-java-21-common-lambda-layer:2
       Handler: software.amazonaws.example.product.handler.GetProductByIdHandler::handleRequest
       Policies:
         - DynamoDBReadPolicy:
@@ -123,7 +123,7 @@ Resources:
       FunctionName: GetProductByIdWithPureJava21LambdaAndPrimingWithCommonLayer
       AutoPublishAlias: liveVersion
       Layers:
-        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:aws-pure-java-21-common-lambda-layer:1
+        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:aws-pure-java-21-common-lambda-layer:2
       Handler: software.amazonaws.example.product.handler.GetProductByIdWithPrimingHandler::handleRequest
       Policies:
         - DynamoDBReadPolicy:
@@ -150,7 +150,7 @@ Resources:
       FunctionName: PutProductWithPureJava21SnapStartWithCommonLayer
       AutoPublishAlias: liveVersion 
       Layers:
-        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:aws-pure-java-21-common-lambda-layer:1
+        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:aws-pure-java-21-common-lambda-layer:2
       Handler: software.amazonaws.example.product.handler.CreateProductHandler::handleRequest
       Policies:
         - DynamoDBCrudPolicy:
