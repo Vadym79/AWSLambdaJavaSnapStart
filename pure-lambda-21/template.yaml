@@ -18,8 +18,8 @@ Globals:
     Timeout: 30 
     MemorySize: 1024
     Architectures:
-      - arm64
-      #- x86_64  
+      #- arm64
+      - x86_64  
     #Tracing: Active
     Environment:
       Variables:
