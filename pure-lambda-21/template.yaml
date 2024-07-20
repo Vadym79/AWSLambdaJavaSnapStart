@@ -13,11 +13,14 @@ Globals:
   Function:
     CodeUri: target/aws-pure-lambda-snap-start-21-1.0.0-SNAPSHOT.jar
     Runtime: java21
-    SnapStart:
-     ApplyOn: PublishedVersions     
+    #SnapStart:
+     #ApplyOn: PublishedVersions     
     Timeout: 30 
-    MemorySize: 1024  
-    Tracing: Active
+    MemorySize: 1024
+    Architectures:
+      - arm64
+      #- x86_64  
+    #Tracing: Active
     Environment:
       Variables:
         JAVA_TOOL_OPTIONS: "-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
@@ -28,7 +31,7 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: !Ref Stage
-      TracingEnabled: true
+      #TracingEnabled: true
       Name: AWSLambdaJava21SnapStartAPI
       Description: Api for AWSLambdaJava21SnapStart
       AccessLogSetting:
