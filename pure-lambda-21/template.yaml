@@ -13,13 +13,13 @@ Globals:
   Function:
     CodeUri: target/aws-pure-lambda-snap-start-21-1.0.0-SNAPSHOT.jar
     Runtime: java21
-    SnapStart:
-     ApplyOn: PublishedVersions     
+    #SnapStart:
+     #ApplyOn: PublishedVersions     
     Timeout: 30 
     MemorySize: 1024
     Architectures:
-      - arm64
-      #- x86_64  
+      #- arm64
+      - x86_64  
     #Tracing: Active
     Environment:
       Variables:
