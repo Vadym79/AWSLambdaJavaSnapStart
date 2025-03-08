@@ -13,8 +13,8 @@ Globals:
   Function:
     CodeUri: target/aws-pure-lambda-snap-start-21-1.0.0-SNAPSHOT.jar
     Runtime: java21
-    #SnapStart:
-     #ApplyOn: PublishedVersions     
+    SnapStart:
+     ApplyOn: PublishedVersions     
     Timeout: 30 
     MemorySize: 1024
     Architectures:
@@ -140,6 +140,31 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Sub "/aws/lambda/${GetProductByIdWithPrimingFunction}"
+      RetentionInDays: 7
+
+
+  GetProductByIdWithFullPrimingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetProductByIdWithPureJava21LambdaAndFullPriming
+      AutoPublishAlias: liveVersion
+      Handler: software.amazonaws.example.product.handler.GetProductByIdWithFullPrimingHandler::handleRequest
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref ProductsTable
+      Events:
+        GetRequestById:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /productsWithFullPriming/{id}
+            Method: get     
+            
+            
+  GetProductByIdWithFullPrimingFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${GetProductByIdWithFullPrimingFunction}"
       RetentionInDays: 7
 
  
