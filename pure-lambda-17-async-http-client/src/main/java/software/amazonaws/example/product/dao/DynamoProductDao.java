@@ -33,7 +33,7 @@ public class DynamoProductDao implements ProductDao {
 	private static final DynamoDbAsyncClient dynamoDbClient = DynamoDbAsyncClient.builder()
 			.credentialsProvider(DefaultCredentialsProvider.create()).region(Region.EU_CENTRAL_1)
 			//.httpClient(AwsCrtAsyncHttpClient.create())
-			 .httpClient(NettyNioAsyncHttpClient.create().close())
+			 .httpClient(NettyNioAsyncHttpClient.create())
 			.build();
 
 	@Override
