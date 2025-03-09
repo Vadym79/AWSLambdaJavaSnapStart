@@ -1,0 +1,200 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  AWSLambdaWithProfilerLayerJava21SnapStartAPI 
+  Sample SAM Template
+
+Parameters:
+  Stage:
+    Type: String
+    Default: prod
+    
+Globals:
+  Function:
+    CodeUri: target/aws-pure-java21-lambda-with-profiler-1.0.0-SNAPSHOT.jar
+    Runtime: java21
+    SnapStart:
+      ApplyOn: PublishedVersions     
+    Timeout: 30 
+    MemorySize: 1024  
+    Tracing: Active
+    Environment:
+      Variables:
+        ASYNC_PROFILER_RESULTS_BUCKET: aws-pure-java21-lambda-with-profiler-bucket
+        JAVA_TOOL_OPTIONS: -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints -javaagent:"/opt/aws-lambda-java21-profiler-lambda-layer-1.0.0-SNAPSHOT-jar-with-dependencies.jar"
+        PRODUCT_TABLE_NAME: !Ref ProductsTable
+
+Resources:
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Stage
+      TracingEnabled: true
+      Name: AWSLambdaWithProfilerLayerJava21SnapStartAPI
+      Description: Api for AWSLambdaWithProfilerLayerJava21SnapStart
+      AccessLogSetting:
+        DestinationArn: !Sub ${MyApiLogGroup.Arn} # This Log Group is already created within our SAM Template
+        Format: "{'integrationLatency':'$context.integrationLatency', 'latency':'$context.responseLatency', 'requestId':'$context.requestId', 'ip': '$context.identity.sourceIp', 'caller':'$context.identity.caller', 'user':'$context.identity.user','requestTime':'$context.requestTime', 'xrayTraceId':'$context.xrayTraceId', 'wafResponseCode':'$context.wafResponseCode', 'httpMethod':'$context.httpMethod','resourcePath':'$context.resourcePath', 'status':'$context.status','protocol':'$context.protocol', 'responseLength':'$context.responseLength' }"
+      #MethodSettings:
+       # - MetricsEnabled: True
+       #   ResourcePath: '/*'
+       #   HttpMethod: '*'
+      Auth:
+        ApiKeyRequired: true  # sets for all methods
+  
+      
+        
+  MyApiLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+       LogGroupName: !Sub "/aws/apigateway/${MyApi}"
+       RetentionInDays: 7
+      
+  MyApiUsagePlan:
+     Type: AWS::ApiGateway::UsagePlan
+     DependsOn:  
+        - MyApiStage
+     Properties:
+      ApiStages: 
+        - ApiId: !Ref MyApi
+          Stage: !Ref Stage
+      UsagePlanName: AWSLambdaWithPrpfilerLayerJava21SnapStartAPIUsagePlan
+      Description: Usage plan for AWSLambdaWithProfilerLayerJava21SnapStartAPI
+      Quota:
+          Limit: 500000
+          Period: DAY
+      Throttle:
+          RateLimit:  10000
+          BurstLimit: 5000   
+
+  MyApiKey: 
+    Type: AWS::ApiGateway::ApiKey
+    DependsOn:  
+       - MyApiStage
+    Properties: 
+      Name: "AWSLambdaWithProfilerLayerJava21SnapStartApiKey"
+      Description: "AWSLambdaWithProfilerLayerJava21SnapStart API Key"
+      Enabled: true
+      GenerateDistinctId: false
+      Value: a6ZbcDefQRW12BN56WEBF7
+      StageKeys:
+        - RestApiId: !Ref MyApi
+          StageName: !Ref Stage
+
+  MyApiUsagePlanKey:
+      Type: "AWS::ApiGateway::UsagePlanKey"
+      DependsOn: 
+      - MyApi
+      Properties:
+        KeyId: !Ref MyApiKey
+        KeyType: API_KEY
+        UsagePlanId: !Ref MyApiUsagePlan
+
+
+  GetProductByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetProductByIdWithPureJava21LambdaWithProfilerLayer
+      AutoPublishAlias: liveVersion
+      Layers:
+        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:aws-lambda-java21-profiler:3
+      Handler: software.amazonaws.example.product.handler.GetProductByIdHandler::handleRequest
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref ProductsTable
+        - S3FullAccessPolicy:
+            BucketName: aws-pure-java21-lambda-with-profiler-bucket   
+      Events:
+        GetRequestById:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /products/{id}
+            Method: get     
+            
+            
+  GetProductByIdFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${GetProductByIdFunction}"
+      RetentionInDays: 7
+
+
+  GetProductByIdWithPrimingFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetProductByIdWithPureJava21LambdaAndPrimingProfilerAllLayer
+      AutoPublishAlias: liveVersion
+      Layers:
+        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:aws-lambda-java21-profiler:3
+      Handler: software.amazonaws.example.product.handler.GetProductByIdWithPrimingHandler::handleRequest
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref ProductsTable
+        - S3FullAccessPolicy:
+            BucketName: aws-pure-java21-lambda-with-profiler-bucket   
+      Events:
+        GetRequestById:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /productsWithPriming/{id}
+            Method: get     
+            
+            
+  GetProductByIdWithPrimingFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${GetProductByIdWithPrimingFunction}"
+      RetentionInDays: 7
+
+ 
+  PutProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: PutProductWithPureJava21SnapStartWithProfilerLayer
+      AutoPublishAlias: liveVersion 
+      Layers:
+        - !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:layer:aws-lambda-java21-profiler:3
+      Handler: software.amazonaws.example.product.handler.CreateProductHandler::handleRequest
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProductsTable
+        - S3FullAccessPolicy:
+            BucketName: aws-pure-java21-lambda-with-profiler-bucket   
+      Events:
+        PutRequest:
+          Type: Api
+          Properties:
+            RestApiId: !Ref MyApi
+            Path: /products
+            Method: put
+
+  PutProductFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${PutProductFunction}"
+      RetentionInDays: 7
+
+  ProductsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: "AWSLambdaWithProfilerLayerJava21SnapStartProductsTable"
+      PointInTimeRecoverySpecification:
+         PointInTimeRecoveryEnabled: true
+      AttributeDefinitions:
+        - AttributeName: 'PK'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'PK'
+          KeyType: 'HASH'
+      BillingMode: PAY_PER_REQUEST    
+      #ProvisionedThroughput: 
+        #ReadCapacityUnits: "1"
+        #WriteCapacityUnits: "1"
+      
+
+Outputs:
+  AWSLambdaJavaSnapStartApiEndpoint:
+    Description: "API Gateway endpoint URL for Prod stage for AWS Lambda Java Snap Start With Profiler Layer"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/prod/products"
