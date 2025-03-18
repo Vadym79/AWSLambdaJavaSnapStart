@@ -47,7 +47,7 @@ public class GetProductByIdWithPrimingHandler implements
 
 		try {
 			if (optionalProduct.isEmpty()) {
-				context.getLogger().log(" product with id " + id + "not found ");
+				context.getLogger().log(" product with id " + id + " not found ");
 				return new APIGatewayProxyResponseEvent().withStatusCode(HttpStatusCode.NOT_FOUND)
 						.withBody("Product with id = " + id + " not found");
 			}
