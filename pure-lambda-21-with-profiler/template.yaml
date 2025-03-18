@@ -180,7 +180,7 @@ Resources:
   ProductsTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: "AWSLambdaWithProfilerLayerJava21SnapStartProductsTable"
+      TableName: "AWSLambdaWithProfilerLayerJava21ProductsTable"
       PointInTimeRecoverySpecification:
          PointInTimeRecoveryEnabled: true
       AttributeDefinitions:
