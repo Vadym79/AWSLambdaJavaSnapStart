@@ -51,6 +51,7 @@ public class GetProductByIdWithFullPrimingHandler implements
 		
     }
 
+	@SuppressWarnings("unused")
 	private static String getAPIGatewayRequestMultiLine () {
 		 return  """
 		 		{

@@ -19,14 +19,14 @@ import software.amazonaws.example.product.dao.DynamoProductDao;
 import software.amazonaws.example.product.dao.ProductDao;
 import software.amazonaws.example.product.entity.Product;
 
-public class GetProductByIdWithPrimingHandler implements 
+public class GetProductByIdWithDynamoDBPrimingHandler implements 
                  RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, Resource {
 
 	private static final ProductDao productDao = new DynamoProductDao();
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	
 	
-	public GetProductByIdWithPrimingHandler () {
+	public GetProductByIdWithDynamoDBPrimingHandler () {
 		Core.getGlobalContext().register(this);
 	}
 	
