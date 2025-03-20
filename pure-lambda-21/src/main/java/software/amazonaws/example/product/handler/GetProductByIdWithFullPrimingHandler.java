@@ -15,8 +15,6 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent.ProxyRequestContext;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent.RequestIdentity;
 import com.amazonaws.services.lambda.runtime.serialization.events.LambdaEventSerializers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,19 +36,19 @@ public class GetProductByIdWithFullPrimingHandler implements
 	
 	@Override
 	public void beforeCheckpoint(org.crac.Context<? extends Resource> context) throws Exception {
+		logger.info("entered beforeCheckpoint");
 		/*
 		APIGatewayProxyRequestEvent requestEvent = new APIGatewayProxyRequestEvent();
 		requestEvent.setPathParameters(Map.of("id","0"));
 		*/
-		logger.info("entered beforeCheckpoint");
 		//APIGatewayProxyRequestEvent requestEvent = LambdaEventSerializers.serializerFor(APIGatewayProxyRequestEvent.class, ClassLoader.getSystemClassLoader())
 		//.fromJson(getAPIGatewayRequestMultiLine());
-		
+	    
 		APIGatewayProxyRequestEvent requestEvent = LambdaEventSerializers.serializerFor(APIGatewayProxyRequestEvent.class, ClassLoader.getSystemClassLoader())
 				.fromJson(objectMapper.writeValueAsString(getAwsProxyRequest()));
-		
-		logger.info("req event: "+requestEvent);
+		logger.info("req event: "+requestEvent);	
 		this.handleRequest(requestEvent, new MockLambdaContext());
+		
     }
 
 	private static String getAPIGatewayRequestMultiLine () {

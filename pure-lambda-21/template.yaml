@@ -118,12 +118,12 @@ Resources:
       RetentionInDays: 7
 
 
-  GetProductByIdWithPrimingFunction:
+  GetProductByIdWithDynamoDBPrimingFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetProductByIdWithPureJava21LambdaAndPriming
+      FunctionName: GetProductByIdWithPureJava21LambdaAndDynamoDBPriming
       AutoPublishAlias: liveVersion
-      Handler: software.amazonaws.example.product.handler.GetProductByIdWithPrimingHandler::handleRequest
+      Handler: software.amazonaws.example.product.handler.GetProductByIdWithDynamoDBPrimingHandler::handleRequest
       Policies:
         - DynamoDBReadPolicy:
             TableName: !Ref ProductsTable
@@ -132,14 +132,14 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref MyApi
-            Path: /productsWithPriming/{id}
+            Path: /productsWithDynamoDBPriming/{id}
             Method: get     
             
             
-  GetProductByIdWithPrimingFunctionLogGroup:
+  GetProductByIdWithDynamoDBPrimingFunctionLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub "/aws/lambda/${GetProductByIdWithPrimingFunction}"
+      LogGroupName: !Sub "/aws/lambda/${GetProductByIdWithDynamoDBPrimingFunction}"
       RetentionInDays: 7
 
 
