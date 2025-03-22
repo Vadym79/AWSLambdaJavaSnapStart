@@ -23,7 +23,7 @@ public class GetProductByIdWithDynamoDBPrimingHandler implements
                  RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, Resource {
 
 	private static final ProductDao productDao = new DynamoProductDao();
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private static final ObjectMapper objectMapper = new ObjectMapper();
 	
 	
 	public GetProductByIdWithDynamoDBPrimingHandler () {

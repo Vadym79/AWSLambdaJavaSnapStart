@@ -27,7 +27,7 @@ public class GetProductByIdWithFullPrimingHandler implements
                  RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent>, Resource {
 
 	private static final ProductDao productDao = new DynamoProductDao();
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final Logger logger = LoggerFactory.getLogger(GetProductByIdWithFullPrimingHandler.class);
 	
 	public GetProductByIdWithFullPrimingHandler () {
@@ -45,10 +45,9 @@ public class GetProductByIdWithFullPrimingHandler implements
 		//.fromJson(getAPIGatewayRequestMultiLine());
 	    
 		APIGatewayProxyRequestEvent requestEvent = LambdaEventSerializers.serializerFor(APIGatewayProxyRequestEvent.class, ClassLoader.getSystemClassLoader())
-				.fromJson(objectMapper.writeValueAsString(getAwsProxyRequest()));
+				.fromJson(getAPIGatewayProxyRequestEventAsJson());
 		logger.info("req event: "+requestEvent);	
 		this.handleRequest(requestEvent, new MockLambdaContext());
-		
     }
 
 	@SuppressWarnings("unused")
@@ -63,21 +62,22 @@ public class GetProductByIdWithFullPrimingHandler implements
 	     """;
 	}
 	
-    private static APIGatewayProxyRequestEvent getAwsProxyRequest () {
-    	final APIGatewayProxyRequestEvent aPIGatewayProxyRequestEvent = new APIGatewayProxyRequestEvent ();
-    	aPIGatewayProxyRequestEvent.setHttpMethod("GET");
-    	aPIGatewayProxyRequestEvent.setPathParameters(Map.of("id","0"));
-        /*
-    	aPIGatewayProxyRequestEvent.setPath("/products/0");
-    	aPIGatewayProxyRequestEvent.setResource("/products/{id}");
+    private static String getAPIGatewayProxyRequestEventAsJson () throws Exception{
+    	final APIGatewayProxyRequestEvent proxyRequestEvent = new APIGatewayProxyRequestEvent ();
+    	proxyRequestEvent.setHttpMethod("GET");
+    	proxyRequestEvent.setPathParameters(Map.of("id","0"));
+        
+    	/*
+    	proxyRequestEvent.setPath("/products/0");
+    	proxyRequestEvent.setResource("/products/{id}");
     
     	final ProxyRequestContext proxyRequestContext = new ProxyRequestContext();
     	final RequestIdentity requestIdentity= new RequestIdentity();
     	requestIdentity.setApiKey("blabla");
     	proxyRequestContext.setIdentity(requestIdentity);
-    	aPIGatewayProxyRequestEvent.setRequestContext(proxyRequestContext);
+    	proxyRequestEvent.setRequestContext(proxyRequestContext);
     	*/
-    	return aPIGatewayProxyRequestEvent;		
+    	return objectMapper.writeValueAsString(proxyRequestEvent);		
     }
 	
 	@Override
@@ -104,6 +104,5 @@ public class GetProductByIdWithFullPrimingHandler implements
 					.withBody("Internal Server Error :: " + je.getMessage());
 		}
 	}
-
 
 }
