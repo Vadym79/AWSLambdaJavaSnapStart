@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent.ProxyRequestContext;
+import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent.RequestIdentity;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.amazonaws.services.lambda.runtime.serialization.events.LambdaEventSerializers;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,7 +64,7 @@ public class GetProductByIdWithFullPrimingHandler implements
 	     """;
 	}
 	
-    private static String getAPIGatewayProxyRequestEventAsJson () throws Exception{
+    private static String getAPIGatewayProxyRequestEventAsJson() throws Exception{
     	final APIGatewayProxyRequestEvent proxyRequestEvent = new APIGatewayProxyRequestEvent ();
     	proxyRequestEvent.setHttpMethod("GET");
     	proxyRequestEvent.setPathParameters(Map.of("id","0"));
@@ -70,13 +72,17 @@ public class GetProductByIdWithFullPrimingHandler implements
     	/*
     	proxyRequestEvent.setPath("/products/0");
     	proxyRequestEvent.setResource("/products/{id}");
+    	
     
     	final ProxyRequestContext proxyRequestContext = new ProxyRequestContext();
     	final RequestIdentity requestIdentity= new RequestIdentity();
     	requestIdentity.setApiKey("blabla");
     	proxyRequestContext.setIdentity(requestIdentity);
+    	proxyRequestContext.setRequestTime("04/Mar/2020:19:15:17 +0000");
+    	proxyRequestContext.setRequestTimeEpoch(1583349317135l);
     	proxyRequestEvent.setRequestContext(proxyRequestContext);
     	*/
+    	
     	return objectMapper.writeValueAsString(proxyRequestEvent);		
     }
 	
