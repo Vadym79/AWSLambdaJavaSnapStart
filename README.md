@@ -1,6 +1,6 @@
 # Explore ways to use Java Runtimes with AWS Lambda with and without AWS Lambda SnapStart  using different framewoks. 
 
-Please follow my [AWS Lambda SnapStart for Java](https://dev.to/vkazulkin/series/24979) article series.  
+Please follow my [AWS Lambda SnapStart for Java](https://dev.to/vkazulkin/series/34787) article series for the detailed explanation.  
 
 
 ## Architecture
